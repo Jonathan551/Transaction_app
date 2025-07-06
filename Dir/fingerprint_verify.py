@@ -6,16 +6,8 @@ import os
 FINGERPRINT_DIR = os.path.join(os.path.dirname(__file__), "fingerprints")
 
 def match_fingerprint(uploaded_path, username, threshold=0.2):
-    """
-    Verifikasi fingerprint yang diupload dengan template fingerprint admin di folder fingerprints/.
-    
-    :param uploaded_path: path ke file fingerprint yang diupload user
-    :param username: nama user yang digunakan sebagai nama file template (misal 'admin1.png')
-    :param threshold: ambang batas kemiripan
-    :return: True jika cocok, False jika tidak
-    """
     try:
-        # Template disimpan di folder berdasarkan username
+
         template_path = os.path.join(FINGERPRINT_DIR, f"{username}.png")
 
         if not os.path.exists(template_path):
