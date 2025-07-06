@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Jul 06, 2025 at 04:38 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Host: localhost:3306
+-- Generation Time: Jul 06, 2025 at 05:30 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.3.7
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,19 +28,20 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `fingerprint` (
-  `id_fingerprint` int(11) NOT NULL,
-  `id_user` int(11) DEFAULT NULL,
-  `file_path` varchar(255) DEFAULT NULL,
-  `template_hash` text DEFAULT NULL,
-  `tanggal_upload` timestamp NOT NULL DEFAULT current_timestamp()
+  `id_fingerprint` int NOT NULL,
+  `id_user` int DEFAULT NULL,
+  `template_hash` text COLLATE utf8mb4_general_ci,
+  `tanggal_upload` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `fingerprint`
 --
 
-INSERT INTO `fingerprint` (`id_fingerprint`, `id_user`, `file_path`, `template_hash`, `tanggal_upload`) VALUES
-(3, 1, 'd:\\Tugas Kuliah\\Python App\\Dir\\fingerprints\\Joni.png', NULL, '2025-07-06 14:11:22');
+INSERT INTO `fingerprint` (`id_fingerprint`, `id_user`, `template_hash`, `tanggal_upload`) VALUES
+(3, 1, NULL, '2025-07-06 14:11:22'),
+(4, 5, NULL, '2025-07-06 15:52:14'),
+(5, 5, NULL, '2025-07-06 17:15:21');
 
 -- --------------------------------------------------------
 
@@ -49,11 +50,11 @@ INSERT INTO `fingerprint` (`id_fingerprint`, `id_user`, `file_path`, `template_h
 --
 
 CREATE TABLE `request_topup` (
-  `id_request` int(11) NOT NULL,
-  `id_user` int(11) DEFAULT NULL,
+  `id_request` int NOT NULL,
+  `id_user` int DEFAULT NULL,
   `jumlah` decimal(15,2) NOT NULL,
-  `status` enum('Pending','Approved','Rejected') DEFAULT 'Pending',
-  `tanggal_request` timestamp NOT NULL DEFAULT current_timestamp()
+  `status` enum('Pending','Approved','Rejected') COLLATE utf8mb4_general_ci DEFAULT 'Pending',
+  `tanggal_request` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -64,7 +65,16 @@ INSERT INTO `request_topup` (`id_request`, `id_user`, `jumlah`, `status`, `tangg
 (1, 2, 150000.00, 'Rejected', '2025-07-04 15:38:41'),
 (2, 2, 20000000.00, 'Approved', '2025-07-06 14:18:51'),
 (3, 2, 20000000.00, 'Rejected', '2025-07-06 14:19:46'),
-(4, 2, 15000.00, 'Approved', '2025-07-06 14:21:31');
+(4, 2, 15000.00, 'Rejected', '2025-07-06 14:21:31'),
+(5, 2, 15000000.00, 'Approved', '2025-07-06 15:50:52'),
+(6, 2, 1600000.00, 'Approved', '2025-07-06 16:55:45'),
+(7, 2, 1500000.00, 'Approved', '2025-07-06 17:03:14'),
+(8, 2, 250000.00, 'Rejected', '2025-07-06 17:03:18'),
+(9, 2, 123456.00, 'Approved', '2025-07-06 17:03:22'),
+(10, 2, 12345.00, 'Approved', '2025-07-06 17:16:44'),
+(11, 2, 11111.00, 'Approved', '2025-07-06 17:16:46'),
+(12, 2, 6423134.00, 'Pending', '2025-07-06 17:16:48'),
+(13, 2, 2345123.00, 'Pending', '2025-07-06 17:16:51');
 
 -- --------------------------------------------------------
 
@@ -73,8 +83,8 @@ INSERT INTO `request_topup` (`id_request`, `id_user`, `jumlah`, `status`, `tangg
 --
 
 CREATE TABLE `role` (
-  `id_role` int(11) NOT NULL,
-  `nama_role` varchar(50) NOT NULL
+  `id_role` int NOT NULL,
+  `nama_role` varchar(50) COLLATE utf8mb4_general_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -93,9 +103,9 @@ INSERT INTO `role` (`id_role`, `nama_role`) VALUES
 --
 
 CREATE TABLE `saldo` (
-  `id_saldo` int(11) NOT NULL,
-  `id_user` int(11) DEFAULT NULL,
-  `saldo` decimal(15,2) DEFAULT 0.00
+  `id_saldo` int NOT NULL,
+  `id_user` int DEFAULT NULL,
+  `saldo` decimal(15,2) DEFAULT '0.00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -103,7 +113,8 @@ CREATE TABLE `saldo` (
 --
 
 INSERT INTO `saldo` (`id_saldo`, `id_user`, `saldo`) VALUES
-(1, 2, 20085000.00);
+(1, 2, 38331912.00),
+(2, 4, 15000.00);
 
 -- --------------------------------------------------------
 
@@ -112,11 +123,11 @@ INSERT INTO `saldo` (`id_saldo`, `id_user`, `saldo`) VALUES
 --
 
 CREATE TABLE `transaksi` (
-  `id_transaksi` int(11) NOT NULL,
-  `id_pengirim` int(11) DEFAULT NULL,
-  `id_penerima` int(11) DEFAULT NULL,
+  `id_transaksi` int NOT NULL,
+  `id_pengirim` int DEFAULT NULL,
+  `id_penerima` int DEFAULT NULL,
   `jumlah` decimal(15,2) NOT NULL,
-  `tanggal_transaksi` timestamp NOT NULL DEFAULT current_timestamp()
+  `tanggal_transaksi` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -126,10 +137,10 @@ CREATE TABLE `transaksi` (
 --
 
 CREATE TABLE `user` (
-  `id_user` int(11) NOT NULL,
-  `username` varchar(50) NOT NULL,
-  `password` varchar(100) NOT NULL,
-  `id_role` int(11) DEFAULT NULL
+  `id_user` int NOT NULL,
+  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
+  `password` varchar(100) COLLATE utf8mb4_general_ci NOT NULL,
+  `id_role` int DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -140,7 +151,9 @@ INSERT INTO `user` (`id_user`, `username`, `password`, `id_role`) VALUES
 (1, 'Joni', '12345', 1),
 (2, 'Gilbert', '12345', 2),
 (3, 'Felix', '12345', 3),
-(4, 'Albert', '12345', 2);
+(4, 'Albert', '12345', 2),
+(5, 'Test', '12345', 1),
+(6, 'Dimas', '12345', 1);
 
 --
 -- Indexes for dumped tables
@@ -198,37 +211,37 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `fingerprint`
 --
 ALTER TABLE `fingerprint`
-  MODIFY `id_fingerprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_fingerprint` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `request_topup`
 --
 ALTER TABLE `request_topup`
-  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_request` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_role` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `saldo`
 --
 ALTER TABLE `saldo`
-  MODIFY `id_saldo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_saldo` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT for table `transaksi`
 --
 ALTER TABLE `transaksi`
-  MODIFY `id_transaksi` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_transaksi` int NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_user` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- Constraints for dumped tables
