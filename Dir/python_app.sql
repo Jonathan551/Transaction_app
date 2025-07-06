@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 04, 2025 at 05:42 PM
+-- Generation Time: Jul 06, 2025 at 04:38 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -24,6 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `fingerprint`
+--
+
+CREATE TABLE `fingerprint` (
+  `id_fingerprint` int(11) NOT NULL,
+  `id_user` int(11) DEFAULT NULL,
+  `file_path` varchar(255) DEFAULT NULL,
+  `template_hash` text DEFAULT NULL,
+  `tanggal_upload` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `fingerprint`
+--
+
+INSERT INTO `fingerprint` (`id_fingerprint`, `id_user`, `file_path`, `template_hash`, `tanggal_upload`) VALUES
+(3, 1, 'd:\\Tugas Kuliah\\Python App\\Dir\\fingerprints\\Joni.png', NULL, '2025-07-06 14:11:22');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `request_topup`
 --
 
@@ -40,7 +61,10 @@ CREATE TABLE `request_topup` (
 --
 
 INSERT INTO `request_topup` (`id_request`, `id_user`, `jumlah`, `status`, `tanggal_request`) VALUES
-(1, 2, 150000.00, 'Rejected', '2025-07-04 15:38:41');
+(1, 2, 150000.00, 'Rejected', '2025-07-04 15:38:41'),
+(2, 2, 20000000.00, 'Approved', '2025-07-06 14:18:51'),
+(3, 2, 20000000.00, 'Rejected', '2025-07-06 14:19:46'),
+(4, 2, 15000.00, 'Approved', '2025-07-06 14:21:31');
 
 -- --------------------------------------------------------
 
@@ -59,7 +83,8 @@ CREATE TABLE `role` (
 
 INSERT INTO `role` (`id_role`, `nama_role`) VALUES
 (1, 'Admin'),
-(2, 'Customer');
+(2, 'Customer'),
+(3, 'Supervisor');
 
 -- --------------------------------------------------------
 
@@ -78,7 +103,7 @@ CREATE TABLE `saldo` (
 --
 
 INSERT INTO `saldo` (`id_saldo`, `id_user`, `saldo`) VALUES
-(1, 2, 70000.00);
+(1, 2, 20085000.00);
 
 -- --------------------------------------------------------
 
@@ -113,11 +138,20 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id_user`, `username`, `password`, `id_role`) VALUES
 (1, 'Joni', '12345', 1),
-(2, 'Gilbert', '12345', 2);
+(2, 'Gilbert', '12345', 2),
+(3, 'Felix', '12345', 3),
+(4, 'Albert', '12345', 2);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `fingerprint`
+--
+ALTER TABLE `fingerprint`
+  ADD PRIMARY KEY (`id_fingerprint`),
+  ADD KEY `id_user` (`id_user`);
 
 --
 -- Indexes for table `request_topup`
@@ -161,16 +195,22 @@ ALTER TABLE `user`
 --
 
 --
+-- AUTO_INCREMENT for table `fingerprint`
+--
+ALTER TABLE `fingerprint`
+  MODIFY `id_fingerprint` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
 -- AUTO_INCREMENT for table `request_topup`
 --
 ALTER TABLE `request_topup`
-  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_request` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_role` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `saldo`
@@ -188,11 +228,17 @@ ALTER TABLE `transaksi`
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `fingerprint`
+--
+ALTER TABLE `fingerprint`
+  ADD CONSTRAINT `fingerprint_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `user` (`id_user`);
 
 --
 -- Constraints for table `request_topup`

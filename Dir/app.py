@@ -42,19 +42,24 @@ class LoginApp:
 
                 self.master.destroy()
                 dashboard = tk.Tk()
-                if role == "Admin":
-                    from admin_dashboard import AdminDashboard
-                    AdminDashboard(dashboard)
-                else:
-                    from customer_dashboard import CustomerDashboard
+
+                if role == "Customer":
                     CustomerDashboard(dashboard, username)
+                elif role in ["Admin", "Supervisor"]:
+                    AdminDashboard(dashboard, username, role)
+                else:
+                    messagebox.showerror("Role Tidak Dikenali", f"Role '{role}' belum didukung.")
+
                 dashboard.mainloop()
 
         except Exception as e:
             messagebox.showerror("Error", f"Gagal koneksi:\n{e}")
 
-# Main
-if __name__ == "__main__":
+
+def main():
     root = tk.Tk()
-    app = LoginApp(root)
+    LoginApp(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    main()

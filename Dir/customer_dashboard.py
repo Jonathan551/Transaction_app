@@ -24,6 +24,7 @@ class CustomerDashboard:
         self.entry_jumlah.pack()
 
         tk.Button(master, text="Request Tambah Dana", command=self.request_topup).pack(pady=10)
+        tk.Button(master, text="Logout", command=self.logout, fg="white", bg="red").pack(pady=10)
 
     def load_saldo(self):
         try:
@@ -75,3 +76,10 @@ class CustomerDashboard:
 
         except Exception as e:
             messagebox.showerror("Error", f"Gagal mengirim permintaan:\n{e}")
+
+    def logout(self):
+        confirm = messagebox.askyesno("Konfirmasi Logout", "Apakah Anda yakin ingin logout?")
+        if confirm:
+            self.master.destroy()
+            import app
+            app.main()
