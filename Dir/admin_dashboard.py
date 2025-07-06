@@ -136,20 +136,9 @@ class AdminDashboard:
                         messagebox.showerror("Fingerprint Dibutuhkan", "Harap pilih file sidik jari Anda.")
                         return
 
-                    cursor.execute("""
-                        SELECT f.file_path FROM fingerprint f
-                        JOIN user u ON f.id_user = u.id_user
-                        WHERE u.username = %s
-                        ORDER BY f.id_fingerprint DESC LIMIT 1
-                    """, (self.username,))
-                    result = cursor.fetchone()
+                    # Verifikasi menggunakan file di folder 'fingerprints' berdasarkan username
+                    cocok = match_fingerprint(fingerprint_file, self.username)
 
-                    if not result:
-                        messagebox.showerror("Fingerprint Tidak Ditemukan", "Fingerprint Anda belum terdaftar.")
-                        return
-
-                    stored_path = result[0]
-                    cocok = match_fingerprint(fingerprint_file, stored_path)
 
                     if not cocok:
                         messagebox.showerror("Verifikasi Gagal", "Sidik jari tidak cocok.")
@@ -230,25 +219,25 @@ class AdminDashboard:
                 return
 
             try:
-                # Pastikan path target tepat
-                base_dir = os.path.dirname(os.path.abspath(__file__))  # .../Dir/
+                # Pastikan folder penyimpanan fingerprint ada
+                base_dir = os.path.dirname(os.path.abspath(__file__))
                 fingerprint_dir = os.path.join(base_dir, "fingerprints")
                 os.makedirs(fingerprint_dir, exist_ok=True)
 
                 file_name = f"{target_user}.png"
                 dest_path = os.path.join(fingerprint_dir, file_name)
-                
+
                 print("📥 File asal:", file_path)
                 print("📤 Akan disalin ke:", dest_path)
 
                 shutil.copy(file_path, dest_path)
 
-                # Simpan ke DB
+                # Simpan ke DB hanya id_user, tanpa file_path
                 conn = connect_db()
                 cursor = conn.cursor()
                 cursor.execute("SELECT id_user FROM user WHERE username = %s", (target_user,))
                 user_id = cursor.fetchone()[0]
-                cursor.execute("INSERT INTO fingerprint (id_user, file_path) VALUES (%s, %s)", (user_id, dest_path))
+                cursor.execute("INSERT INTO fingerprint (id_user) VALUES (%s)", (user_id,))
                 conn.commit()
                 conn.close()
 
@@ -259,6 +248,7 @@ class AdminDashboard:
 
         tk.Button(win, text="Unggah Fingerprint", command=simpan_fingerprint).pack(pady=10)
         load_admins()
+
 
     def tambah_user(self):
         win = tk.Toplevel(self.master)
