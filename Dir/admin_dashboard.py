@@ -30,7 +30,8 @@ class AdminDashboard:
         self.entry_amount.pack()
 
         tk.Button(master, text="Tambahkan Dana", command=self.tambah_dana).pack(pady=10)
-        tk.Button(master, text="Kelola Request Dana", command=self.kelola_request).pack(pady=5)
+        if self.role == "Admin":
+            tk.Button(master, text="Kelola Request Dana", command=self.kelola_request).pack(pady=5)
         tk.Button(master, text="Logout", command=self.logout, fg="white", bg="red").pack(pady=10)
 
         if self.role == "Supervisor":
